@@ -124,6 +124,7 @@ GameObject:
   - component: {fileID: 38851360}
   - component: {fileID: 38851359}
   - component: {fileID: 38851358}
+  - component: {fileID: 38851362}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -162,7 +163,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
+  far clip plane: 3000
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -187,13 +188,28 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 38851357}
-  m_LocalRotation: {x: 0.15674303, y: -0.6859759, z: 0.15506165, w: 0.69341516}
-  m_LocalPosition: {x: 6.2846665, y: 12.856776, z: -0.13862076}
+  m_LocalRotation: {x: -0.1452535, y: 0.6979526, z: -0.14789549, w: -0.68548566}
+  m_LocalPosition: {x: 30.14978, y: 26.035309, z: 0.21608776}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &38851362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 38851357}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4864b8c65d9cb724da677b8b33dc3f51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 2077609399}
+  velocity: {x: 1, y: 1, z: 1}
+  defaultDistance: {x: 10, y: 10, z: 0}
+  distance: 1.05
 --- !u!1 &62191317
 GameObject:
   m_ObjectHideFlags: 0
@@ -278,7 +294,7 @@ Transform:
   m_LocalScale: {x: 500, y: 1, z: 500}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1385460570
 GameObject:
@@ -427,7 +443,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &2077609395
 GameObject:
@@ -511,7 +527,7 @@ Transform:
   m_GameObject: {fileID: 2077609395}
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 10, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children:
   - {fileID: 1385460571}
   m_Father: {fileID: 0}
@@ -543,6 +559,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c931e62f8701eac469f92cb5df04ec9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 500
+  speed: 5000
   rollSpeed: 50
-  pitchSpeed: 100
+  pitchSpeed: 60

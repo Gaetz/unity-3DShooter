@@ -13,11 +13,11 @@ public class ShipMovement : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         rbody = GetComponent<Rigidbody>();
-        rbody.velocity = speed * transform.up * Time.deltaTime;
     }
 	
 	// Update is called once per frame
 	void Update () {
+        // Input
 		if(Input.GetKey(KeyCode.Q))
         {
             transform.Rotate(Vector3.up * rollSpeed * Time.deltaTime);

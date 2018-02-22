@@ -7,6 +7,7 @@ Créer le sol : clic droit sur la scene, 3D object, plane. Reset sa position. Ch
 Créer une capsule : clic droit sur la scene, 3D object, capsule. Ce sera l'avion. Reset la position, mettre 10 en Y. Mettre la rotation Z à 90. Rennomer en "avion".
 En profiter pour régler les controles avec Edit/Preferences/Keys. Regler aussi les outils pour les placer sur AZERT
 Créer des ailes pour l'avion en lui créer un enfant Cube, que l'on écrase. Mettre la position du cube à 0 puis le placer correctement pour qu'il ressemble à des ailes. Les ailes bougent avec la capsule.
+Mettre la taille de l'avion à 10 sur toutes les coordonnées.
 Dans la fenetre assets, créer un material. Lui donner une couleur (albedo) plus agréable que le blanc. Renommer en "FloorMaterial". Déplacer sur le gameobject sol.
 Sauvegarder la scene.
 Se déplacer autour de l'avion pour prendre eun bon point de vue. Sélectionner la caméra. Faire GameObject / Align with view pour donner le bon angle à la camera.
@@ -87,9 +88,36 @@ Calcul mathématique compliqué. Unity nous simplifie la tache.
 
     rbody.velocity = speed * (transform.rotation * Vector3.up) * Time.deltaTime;
 
-Quand on fait trnasform.rotation * Vector3.up, il se déroule un beau calcul matriciel que l'on ne gère pas, et qui permet au devant de l'avion de correspondre à l'angle choisi.
+Quand on fait transform.rotation * Vector3.up, il se déroule un beau calcul matriciel que l'on ne gère pas, et qui permet au devant de l'avion de correspondre à l'angle choisi.
 
 
 7. L'avion est à peu pres controllable, mais il n'est pas suivi par la caméra.
 
-D'autres calculs matriciels bien compliqués ! Heureusement, là encore, unity nous simplifie la vie.
+Première solution : mettre la caméra comme enfant du vaisseau. Ca marche mais c'est moche. Sensations de jeu pas intéressantes.
+
+Deuxième solution, un petit peu de code. On voudrait que la caméra "ratrappe" la position et l'angle de l'avion. Créer un script SmoothFollow pour la caméra.
+
+public class SmoothFollow : MonoBehaviour
+{
+    public Transform target;
+
+    public Vector3 velocity = Vector3.one;
+    public Vector3 defaultDistance;
+    public float distance;
+
+    
+    void LateUpdate()
+    {
+        if (!target) return;
+        
+        Vector3 toPosition = target.position + (target.rotation * defaultDistance);
+        Vector3 currentPosition = Vector3.SmoothDamp(transform.position, toPosition, ref velocity, distance);
+        transform.position = currentPosition;
+
+        transform.LookAt(target);
+    }
+}
+
+Propositions de valeurs :
+Default distance 10 10 0
+Distance 1.2
