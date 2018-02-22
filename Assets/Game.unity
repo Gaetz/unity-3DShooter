@@ -543,3 +543,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c931e62f8701eac469f92cb5df04ec9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed: 500
+  rollSpeed: 50
+  pitchSpeed: 100

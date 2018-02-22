@@ -1,14 +1,16 @@
 1. Ouvrir unity, créer un projet 3D
 
-2. Sol et vaisseau
+
+2. Sol et avion
 
 Créer le sol : clic droit sur la scene, 3D object, plane. Reset sa position. Changer sa scale x et z pour 500. Renommer en sol.
-Créer une capsule : clic droit sur la scene, 3D object, capsule. Ce sera le vaisseau. Reset la position, mettre 10 en Y. Mettre la rotation Z à 90. Rennomer en "Vaisseau".
+Créer une capsule : clic droit sur la scene, 3D object, capsule. Ce sera l'avion. Reset la position, mettre 10 en Y. Mettre la rotation Z à 90. Rennomer en "avion".
 En profiter pour régler les controles avec Edit/Preferences/Keys. Regler aussi les outils pour les placer sur AZERT
-Créer des ailes pour le vaisseau en lui créer un enfant Cube, que l'on écrase. Mettre la position du cube à 0 puis le placer correctement pour qu'il ressemble à des ailes. Les ailes bougent avec la capsule.
+Créer des ailes pour l'avion en lui créer un enfant Cube, que l'on écrase. Mettre la position du cube à 0 puis le placer correctement pour qu'il ressemble à des ailes. Les ailes bougent avec la capsule.
 Dans la fenetre assets, créer un material. Lui donner une couleur (albedo) plus agréable que le blanc. Renommer en "FloorMaterial". Déplacer sur le gameobject sol.
 Sauvegarder la scene.
-Se déplacer autour du vaisseau pour prendr eun bon point de vue. Sélectionner la caméra. Faire GameObject / Align with view pour donner le bon angle à la camera.
+Se déplacer autour de l'avion pour prendre eun bon point de vue. Sélectionner la caméra. Faire GameObject / Align with view pour donner le bon angle à la camera.
+
 
 3. Texture pour se repérer.
 
@@ -16,12 +18,78 @@ Sous paint, créer un carré de 256 * 256. Donner une bordure en haut et à gauc
 Importer dans unity.
 Glisser la texture sur l'albedo. Mettre tiling à 50 * 50.
 
-4. Faire avancer le vaisseau
 
-Ajouter un composant RigidBody au vaisseau. Tester.
+4. Faire avancer l'avion
+
+Ajouter un composant RigidBody à l'avion. Tester.
 Enlever la gravité.
-Créer un composant script ShipMovement sur le vaisseau.
+Créer un composant script ShipMovement sur l'avion.
+
+Déclarer le rigidbody dans le script :
+
+    Rigidbody rbody;
+
+Le récupérer pour pouvoir l'utiliser dans Start() : 
+
+    rbody = GetComponent<Rigidbody>();
+
+Donner une vitesse dans start :
+
+    rbody.velocity = new Vector3(-10f, 0, 0);
+
+On aimerait pouvoir régler la vitesse sans aller dans le code. Il suffit de créer un membre public Speed:
+
+    public Vector3 Speed;
+
+Et de rendre la vélocité égale à cette vitesse.
+
+    rbody.velocity = speed;
+
+On voit que la vitesse est désormais éditable dans Unity.
 
 
-4. Controles : rotation du vaisseau
+5. Controles : rotation de l'avion
 
+On veut que l'avion tourne sur lui meme dans un sens ou dans l'autre quand on appuie sur Q ou D.
+
+    if(Input.GetKey(KeyCode.Q))
+    {
+        // Rotation sur la gauche
+    }
+    if (Input.GetKey(KeyCode.D))
+    {
+        // Rotation sur la droite
+    }
+
+Le code pour la rotation :
+
+    transform.Rotate(Vector3.up * rollSpeed * Time.deltaTime);
+
+Avec rotateSpeed une nouvelle variable publique
+
+Maintenant qu'on a la rotation le long de l'axe de l'avion, on veut le faire tourner vers le haut et vers le bas avec Z et S. Cela nous permettra de le controler l'avion.
+
+    if (Input.GetKey(KeyCode.S))
+    {
+        transform.Rotate(Vector3.forward * -pitchSpeed * Time.deltaTime);
+    }
+    if (Input.GetKey(KeyCode.Z))
+    {
+        transform.Rotate(Vector3.forward * pitchSpeed * Time.deltaTime);
+    }
+
+Probleme : l'avion n'obeit pas du tout à sa rotation. Il continue à avancer selon l'axe X.
+
+
+6. L'avion avance selon son angle
+
+Calcul mathématique compliqué. Unity nous simplifie la tache.
+
+    rbody.velocity = speed * (transform.rotation * Vector3.up) * Time.deltaTime;
+
+Quand on fait trnasform.rotation * Vector3.up, il se déroule un beau calcul matriciel que l'on ne gère pas, et qui permet au devant de l'avion de correspondre à l'angle choisi.
+
+
+7. L'avion est à peu pres controllable, mais il n'est pas suivi par la caméra.
+
+D'autres calculs matriciels bien compliqués ! Heureusement, là encore, unity nous simplifie la vie.
