@@ -4,10 +4,24 @@
 
 Créer le sol : clic droit sur la scene, 3D object, plane. Reset sa position. Changer sa scale x et z pour 500. Renommer en sol.
 Créer une capsule : clic droit sur la scene, 3D object, capsule. Ce sera le vaisseau. Reset la position, mettre 10 en Y. Mettre la rotation Z à 90. Rennomer en "Vaisseau".
+En profiter pour régler les controles avec Edit/Preferences/Keys. Regler aussi les outils pour les placer sur AZERT
 Créer des ailes pour le vaisseau en lui créer un enfant Cube, que l'on écrase. Mettre la position du cube à 0 puis le placer correctement pour qu'il ressemble à des ailes. Les ailes bougent avec la capsule.
 Dans la fenetre assets, créer un material. Lui donner une couleur (albedo) plus agréable que le blanc. Renommer en "FloorMaterial". Déplacer sur le gameobject sol.
 Sauvegarder la scene.
 Se déplacer autour du vaisseau pour prendr eun bon point de vue. Sélectionner la caméra. Faire GameObject / Align with view pour donner le bon angle à la camera.
 
-3. Controles : rotation du vaisseau
+3. Texture pour se repérer.
+
+Sous paint, créer un carré de 256 * 256. Donner une bordure en haut et à gauche.
+Importer dans unity.
+Glisser la texture sur l'albedo. Mettre tiling à 50 * 50.
+
+4. Faire avancer le vaisseau
+
+Ajouter un composant RigidBody au vaisseau. Tester.
+Enlever la gravité.
+Créer un composant script ShipMovement sur le vaisseau.
+
+
+4. Controles : rotation du vaisseau
 
