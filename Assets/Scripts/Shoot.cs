@@ -10,6 +10,7 @@ public class Shoot : MonoBehaviour {
 	void Start () {
         rbody = GetComponent<Rigidbody>();
         rbody.velocity = speed * (transform.rotation * Vector3.up) * Time.deltaTime;
+        Destroy(gameObject, 4f);
     }
 	
 }

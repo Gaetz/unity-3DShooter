@@ -7,7 +7,7 @@ Créer le sol : clic droit sur la scene, 3D object, plane. Reset sa position. Ch
 Créer une capsule : clic droit sur la scene, 3D object, capsule. Ce sera l'avion. Reset la position, mettre 10 en Y. Mettre la rotation Z à 90. Rennomer en "avion".
 En profiter pour régler les controles avec Edit/Preferences/Keys. Regler aussi les outils pour les placer sur AZERT
 Créer des ailes pour l'avion en lui créer un enfant Cube, que l'on écrase. Mettre la position du cube à 0 puis le placer correctement pour qu'il ressemble à des ailes. Les ailes bougent avec la capsule.
-Mettre la taille de l'avion à 10 sur toutes les coordonnées.
+Mettre la taille de l'avion à 5 10 5. Mettre la taille des ailes à 0.05 0.5 6.
 Dans la fenetre assets, créer un material. Lui donner une couleur (albedo) plus agréable que le blanc. Renommer en "FloorMaterial". Déplacer sur le gameobject sol.
 Sauvegarder la scene.
 Se déplacer autour de l'avion pour prendre eun bon point de vue. Sélectionner la caméra. Faire GameObject / Align with view pour donner le bon angle à la camera.
@@ -126,7 +126,7 @@ Distance 1.2
 8. Tirer
 
 Créer un objet vide enfant de l'avion, le nommer ShhotSpawnPoint et le placer sous l'avion.
-Créer un Cylindre, le nommer shoot. Lui donner une taile de 0.1 1 0.1.
+Créer un Cylindre, le nommer shoot. Lui donner une taile de 1 5 1.
 Faire glisser shoot dans la barre des assets. L'objet devient un prefab. On peut le supprimer de la scene.
 Créer un script ShipShooting dans l'avion. OIn veut direr en appuyany sur espace. Pour tirer, on instancie notre objet de tir.
 
@@ -149,4 +149,30 @@ Instantiate(shoot, transform.GetChild(1).position, transform.rotation);
 
 Ca marche, mais les tirs ne bougent pas. On va leur ajouter un script qui leur donne une velocité. Qui doit être supérieure à celle de l'avion !
 
-Crféer un script Shoot dans le prefab Shoot.
+Créer un script Shoot dans le prefab Shoot. Créer aussi un Rigidbody pour qu'on puisse lui donner une vélocité. Ce rigidbody n'est pas soumis à la gravité. 
+Recupérer le rigid body dans le script et leui donner une vélocité, parametrée par une vitesse publique.
+
+Trois problèmes ! 
+1. Les tirs s'éparpillent parce qu'ils se rentrent dedans.
+2. Les tirs restent indéfiniment dans le jeu. Même si les objets sont simples, on risque de saturer la memoire.
+3. Il y a trop de tirs. On genere une espece de spagetthis.
+
+
+
+9. Régler les problèmes des tirs
+
+Ca commence à être le bazar dans nos assets ! Créet un dossier script et mettre tous les scripts dedans. Unity gère l'association avec les GameObjects.
+
+Problème 1 : les tirs s'éparpillent.
+C'est parce que la physique du jeu fait interagir les tirs. Cocher isTrigger dans le composant collider du tir.
+
+Problème 2 : les tirs demeurent. 
+Ils ont une vitesse rapide donc deviennent très vite petits. On va leur donner une durée de vie de 3 secondes. Dans le script, ajouter :
+
+        Destroy(gameObject, 4f);
+
+Probleme 3 : les spagetthis.
+
+La solution est de laisser s'écouler du temps entre chaque tir. Occupons nous de ShipShhoting.
+
+On va créer un cooldown et un compteur qui s'incrémente avec le temps entre chaque frame. Quand ce temps depasse la durée du cooldown, on peut instancier un tir.
