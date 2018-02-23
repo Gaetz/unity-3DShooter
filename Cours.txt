@@ -1,6 +1,7 @@
 ﻿1. Ouvrir unity, créer un projet 3D
 
 
+
 2. Sol et avion
 
 Créer le sol : clic droit sur la scene, 3D object, plane. Reset sa position. Changer sa scale x et z pour 500. Renommer en sol.
@@ -13,11 +14,13 @@ Sauvegarder la scene.
 Se déplacer autour de l'avion pour prendre eun bon point de vue. Sélectionner la caméra. Faire GameObject / Align with view pour donner le bon angle à la camera.
 
 
+
 3. Texture pour se repérer.
 
 Sous paint, créer un carré de 256 * 256. Donner une bordure en haut et à gauche.
 Importer dans unity.
 Glisser la texture sur l'albedo. Mettre tiling à 50 * 50.
+
 
 
 4. Faire avancer l'avion
@@ -47,6 +50,7 @@ Et de rendre la vélocité égale à cette vitesse.
     rbody.velocity = speed;
 
 On voit que la vitesse est désormais éditable dans Unity.
+
 
 
 5. Controles : rotation de l'avion
@@ -82,6 +86,7 @@ Maintenant qu'on a la rotation le long de l'axe de l'avion, on veut le faire tou
 Probleme : l'avion n'obeit pas du tout à sa rotation. Il continue à avancer selon l'axe X.
 
 
+
 6. L'avion avance selon son angle
 
 Calcul mathématique compliqué. Unity nous simplifie la tache.
@@ -89,6 +94,7 @@ Calcul mathématique compliqué. Unity nous simplifie la tache.
     rbody.velocity = speed * (transform.rotation * Vector3.up) * Time.deltaTime;
 
 Quand on fait transform.rotation * Vector3.up, il se déroule un beau calcul matriciel que l'on ne gère pas, et qui permet au devant de l'avion de correspondre à l'angle choisi.
+
 
 
 7. L'avion est à peu pres controllable, mais il n'est pas suivi par la caméra.
@@ -121,6 +127,7 @@ public class SmoothFollow : MonoBehaviour
 Propositions de valeurs :
 Default distance 10 10 0
 Distance 1.2
+
 
 
 8. Tirer
@@ -171,8 +178,72 @@ Ils ont une vitesse rapide donc deviennent très vite petits. On va leur donner 
 
         Destroy(gameObject, 4f);
 
+On peut aussi créer une variable lifetime publique et l'utiliser dans le destroy. Comme ca vous pouivez régler la durée de vie des tirs depuis unity !
+
 Probleme 3 : les spagetthis.
 
 La solution est de laisser s'écouler du temps entre chaque tir. Occupons nous de ShipShhoting.
 
 On va créer un cooldown et un compteur qui s'incrémente avec le temps entre chaque frame. Quand ce temps depasse la durée du cooldown, on peut instancier un tir.
+
+public float cooldown = 0.5f;
+
+float counter = 1f;
+	
+void Update () {
+        if (Input.GetKey(KeyCode.Space))
+        {
+            if(counter > cooldown)
+            {
+                Instantiate(shoot, transform.GetChild(1).position, transform.rotation);
+                counter = 0f;
+            }
+        }
+        counter += Time.deltaTime;
+}
+
+Maintenant on aimerait avoir une petite amélioration. On aimerait un viseur devant l'avion (mais qui ne doit pas interagir avec la physique). Et on aimerait que les tirs ne partent non pas d'une mais de deux sources. Gaucher droite gauche droite. Ca serait plus joli et plus realiste.
+
+
+
+10. Ameliorer les tirs
+
+Pour le viseur, créer un sprite et la placer loin devant l'avion, face à l'avion. Choisir un sprite dans ceux proposés par défaut.
+
+Par exemple : 
+Position 0 10 0 
+Rotation 90 0 0
+Taille 2 2 1
+
+Pour le second tir, dupliquer l'objet ShootSpawnPoint avec Ctrl + D. Attention à leur ordre dans la hiérarche. Cet ordre est important pour le script.
+
+On les voit pas trop, sauf en les sélectionnant dans la hiérarchie. On va ajouter des guizmos pour voir cet objets invisibles. Il suffit de cliquer sur l'icone a coté du nom dans linspecteur, et d'attribuer un petit rond ou un petit losange. Maintenant on peut les placer facilement.
+
+Dans notre script, on veut signaler si c'est le spawn de gauche qui a tiré ou si c'est le droite. Si c'est le gauche on tire avec le droite (et on dit que c'est le gauche qui a tiré) et si c'est le droite on tire avec le gauche.
+
+On crée la variable :
+    bool spawnLeftShot = false;
+
+On l'utilise dans le update :
+
+void Update () {
+        if (Input.GetKey(KeyCode.Space))
+        {
+            if(counter > cooldown)
+            {
+                if(spawnLeftShot)
+                {
+                    Instantiate(shoot, transform.GetChild(1).position, transform.rotation);
+                    spawnLeftShot = false;
+                }
+                else
+                {
+                    Instantiate(shoot, transform.GetChild(0).position, transform.rotation);
+                    spawnLeftShot = true;
+                }
+                counter = 0f;
+            }
+        }
+        counter += Time.deltaTime;
+}
+
