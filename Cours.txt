@@ -1,4 +1,4 @@
-1. Ouvrir unity, créer un projet 3D
+﻿1. Ouvrir unity, créer un projet 3D
 
 
 2. Sol et avion
@@ -121,3 +121,32 @@ public class SmoothFollow : MonoBehaviour
 Propositions de valeurs :
 Default distance 10 10 0
 Distance 1.2
+
+
+8. Tirer
+
+Créer un objet vide enfant de l'avion, le nommer ShhotSpawnPoint et le placer sous l'avion.
+Créer un Cylindre, le nommer shoot. Lui donner une taile de 0.1 1 0.1.
+Faire glisser shoot dans la barre des assets. L'objet devient un prefab. On peut le supprimer de la scene.
+Créer un script ShipShooting dans l'avion. OIn veut direr en appuyany sur espace. Pour tirer, on instancie notre objet de tir.
+
+void Update () {
+        if (Input.GetKey(KeyCode.Space))
+        {
+	Instantiate(shoot, position, rotation);
+        }
+}
+
+Il faut quo'n puisse passer notre objet de tir: 
+
+public GameObject shoot;
+
+On peut maintenant glisser le prefab dans le slot shoot du script.
+
+On veut la position de l'objet enfant (le deuxieme dans le hierarchie) et la rotation de l'avion.
+
+Instantiate(shoot, transform.GetChild(1).position, transform.rotation);
+
+Ca marche, mais les tirs ne bougent pas. On va leur ajouter un script qui leur donne une velocité. Qui doit être supérieure à celle de l'avion !
+
+Crféer un script Shoot dans le prefab Shoot.
