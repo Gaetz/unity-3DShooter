@@ -6,6 +6,7 @@ public class Shoot : MonoBehaviour {
 
     public float speed;
     public float lifetime = 3f;
+
     Rigidbody rbody;
 
 	void Start () {
@@ -13,5 +14,5 @@ public class Shoot : MonoBehaviour {
         rbody.velocity = speed * (transform.rotation * Vector3.up) * Time.deltaTime;
         Destroy(gameObject, lifetime);
     }
-	
+
 }

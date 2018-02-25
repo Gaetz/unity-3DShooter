@@ -247,3 +247,47 @@ void Update () {
         counter += Time.deltaTime;
 }
 
+
+
+11. Faire exploser les tirs quand ils rencontrent un obstacle (le sol)
+
+Prepation de l'explosion. Créer un Particule system. Mettre une shape sphere, augmenter l'emission et la vitesse des particules. Jouer avec les parametres pour que ca fasse une petite explosion.
+Renommer en ShootExplosion. En faire un Prefab.
+Principe du trigger : on peut déclencher un script quand il se passe qqch.
+Créer un box collider assez fin autour du sol. En faire un trigger.
+Créer un script ShootTarget qui va s'activer quand un trigger passera dedans. Lui associer un objet public ShootExplosion.
+Instancier cet objet quand un trigger avec le tag shoot (qu'il faut créer) passe à travers.
+
+    public GameObject shootExplosion;
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == "Shoot")
+        {
+            Instantiate(shootExplosion, other.transform.position, other.transform.rotation);
+            Destroy(other.gameObject);
+        }
+
+    }
+
+Problème : les explosions demeurent.
+Prévoir leur struction au bout d'une seconde avec :
+
+            Destroy(explosion, 1f);
+
+On peut récupérer la référence de l'objet à detruire à partir d'Instantiate.
+
+
+12. Objets à détruire
+
+Créer des cubes qui soient à la fois des hooting targets, et qui ait un autres script avec un certain nombre de point de vie. A chaque fois qu'ils sont touchés par un tirs, ils perdent 1 point de vie.
+A zero points de viues ils dsparaissent dansune explosion.
+
+
+13. Générer des cubes avec une coroutine. Ils se deplacent dans une direction. Quand ils atteingne t un bord du plateau, ils disparaissent.
+
+
+14. UI pour compter le score.
+
+
+15. Menu pour acceder au jeu.
