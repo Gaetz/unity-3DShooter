@@ -7,6 +7,7 @@ public class ShipMovement : MonoBehaviour {
     public float speed;
     public float rollSpeed;
     public float pitchSpeed;
+    public float yawSpeed;
 
     Rigidbody rbody;
     
@@ -31,6 +32,14 @@ public class ShipMovement : MonoBehaviour {
         if (Input.GetKey(KeyCode.Z))
         {
             transform.Rotate(Vector3.forward * pitchSpeed * Time.deltaTime);
+        }
+        if (Input.GetKey(KeyCode.LeftArrow))
+        {
+            transform.Rotate(Vector3.right * -yawSpeed * Time.deltaTime);
+        }
+        if (Input.GetKey(KeyCode.RightArrow))
+        {
+            transform.Rotate(Vector3.right * yawSpeed * Time.deltaTime);
         }
         // Direction
         rbody.velocity = speed * (transform.rotation * Vector3.up) * Time.deltaTime;
