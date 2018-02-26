@@ -13,7 +13,13 @@ public class ShootTarget : MonoBehaviour {
             GameObject explosion = Instantiate(shootExplosion, other.transform.position, other.transform.rotation);
             Destroy(other.gameObject);
             Destroy(explosion, 1f);
+            // Life decrement
+            Life targetLife = GetComponent<Life>();
+            if(targetLife != null)
+            {
+                targetLife.Hurt(1);
+            }
         }
-
+        
     }
 }

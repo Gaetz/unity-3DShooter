@@ -280,11 +280,50 @@ On peut récupérer la référence de l'objet à detruire à partir d'Instantiat
 
 12. Objets à détruire
 
-Créer des cubes qui soient à la fois des hooting targets, et qui ait un autres script avec un certain nombre de point de vie. A chaque fois qu'ils sont touchés par un tirs, ils perdent 1 point de vie.
-A zero points de viues ils dsparaissent dansune explosion.
+Créer un cube qui soit à la fois une shooting target, et qui ait un autres script avec un certain nombre de point de vie. 
+Quand le cube est touché par un tir (dans le script shooting target), on appelle le composant qui gere la vie pour retirer des points de vie.
+
+    Life targetLife = GetComponent<Life>();
+    if(targetLife != null)
+    {
+        targetLife.Hurt(1);
+    }
+
+A zero points de vie, le composant vie déclenche la mort du cube, avec une explosion.
+
+Attention ! Le cube ne doit pas mourir plusieurs fois : )
+
+public class Life : MonoBehaviour {
+
+    public int hp;
+    public GameObject deathExplosion;
+    bool hasDied = false;
+
+    public void Hurt(int lostHp)
+    {
+        hp -= lostHp;
+        if(hp <= 0 && !hasDied)
+        {
+            Die();
+            hasDied = true;
+        }
+    }
+
+    void Die()
+    {
+        GameObject explosion = Instantiate(deathExplosion, transform.position, transform.rotation);
+        Destroy(gameObject);
+        Destroy(explosion, 1.5f);
+    }
+
+}
 
 
-13. Générer des cubes avec une coroutine. Ils se deplacent dans une direction. Quand ils atteingne t un bord du plateau, ils disparaissent.
+13. Génération de cibles
+
+Commencer par faire du cube cible un prefab. C'est le bazar, donc créer un dossier Prefab pour els ranger, ainsi qu'un dossier Vfx pour les explosions.
+
+Générer des cubes avec une coroutine. Ils se deplacent dans une direction. Quand ils atteingnent un bord du plateau, ils disparaissent.
 
 
 14. UI pour compter le score.
