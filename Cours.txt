@@ -159,6 +159,17 @@ Ca marche, mais les tirs ne bougent pas. On va leur ajouter un script qui leur d
 Créer un script Shoot dans le prefab Shoot. Créer aussi un Rigidbody pour qu'on puisse lui donner une vélocité. Ce rigidbody n'est pas soumis à la gravité. 
 Recupérer le rigid body dans le script et leui donner une vélocité, parametrée par une vitesse publique.
 
+    public float speed;
+    public float lifetime = 3f;
+
+    Rigidbody rbody;
+
+	void Start () {
+        rbody = GetComponent<Rigidbody>();
+        rbody.velocity = speed * (transform.rotation * Vector3.up) * Time.deltaTime;
+        Destroy(gameObject, lifetime);
+    }
+
 Trois problèmes ! 
 1. Les tirs s'éparpillent parce qu'ils se rentrent dedans.
 2. Les tirs restent indéfiniment dans le jeu. Même si les objets sont simples, on risque de saturer la memoire.
@@ -276,6 +287,26 @@ Prévoir leur struction au bout d'une seconde avec :
             Destroy(explosion, 1f);
 
 On peut récupérer la référence de l'objet à detruire à partir d'Instantiate.
+
+    public GameObject shootExplosion;
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == "Shoot")
+        {
+            GameObject explosion = Instantiate(shootExplosion, other.transform.position, other.transform.rotation);
+            Destroy(other.gameObject);
+            Destroy(explosion, 1f);
+            // Life decrement
+            Life targetLife = GetComponent<Life>();
+            if(targetLife != null)
+            {
+                targetLife.Hurt(1);
+            }
+        }
+        
+    }
+
 
 
 12. Objets à détruire
