@@ -5,6 +5,7 @@ using UnityEngine;
 public class ShipMovement : MonoBehaviour {
 
     public float speed;
+    public float speedVariation;
     public float rollSpeed;
     public float pitchSpeed;
     public float yawSpeed;
@@ -40,6 +41,14 @@ public class ShipMovement : MonoBehaviour {
         if (Input.GetKey(KeyCode.RightArrow))
         {
             transform.Rotate(Vector3.right * yawSpeed * Time.deltaTime);
+        }
+        if (Input.GetKey(KeyCode.UpArrow))
+        {
+            speed += speedVariation;
+        }
+        if (Input.GetKey(KeyCode.DownArrow))
+        {
+            speed -= speedVariation;
         }
         // Direction
         rbody.velocity = speed * (transform.rotation * Vector3.up) * Time.deltaTime;

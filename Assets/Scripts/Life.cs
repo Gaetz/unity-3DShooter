@@ -23,6 +23,7 @@ public class Life : MonoBehaviour {
         GameObject explosion = Instantiate(deathExplosion, transform.position, transform.rotation);
         Destroy(gameObject);
         Destroy(explosion, 1.5f);
+        GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().IncreaseScore(1);
     }
 
 }
